@@ -1,0 +1,83 @@
+面向对象编程
+    类和实例
+        class Student (object): object 表示该类从哪个类继承
+            pass
+        bart = Student() bart 是指向Student的一个实例
+        bart.name = 'bart simpson' 给bart绑定一个 name 属性
+
+        类起到模板的作用
+        动过定义__init__绑定属性
+        class Student(object):
+            def __init__(self, name, score): __init__第一个参数永远是self
+                self.name = name
+                self.score = score
+        >>>bart = Student('Bart Simpson', 59)
+        >>>bart.name
+        'Bart Simpson'
+        >>>bart.score
+        59
+
+        数据封装
+        不用调用外部函数，在内部定义访问数据的函数即封装
+        class Student(object):
+            def __init__(self, name, score):
+                self.name = name
+                self.score = score
+
+            def print_score(self):
+                print('%s: %s' % (self.name, self.score))
+        封装的另一个好处是可以给Student类增加新的方法，比如get_grade
+        class Student(object):
+            ...
+            def get_grade(self):
+                if self.score >= 90:
+                    return 'A'
+                elif self.score >= 60:
+                    return 'B'
+                else:
+                    return 'C'
+        get_grade方法可以直接在实例变量上调用，不需要知道内部实现细节
+            lisa = Student('Lisa', 99)
+            bart = Student('Bart', 59)
+            print(lisa.name, lisa.get_grade())
+            print(bart.name, bart.get_grade())
+
+
+    访问限制
+        把属性的名称前加上两个下划线__，变量只有内部可以访问
+            class Student(object):
+
+                def __init__(self, name, score):
+                    self.__name = name
+                    self.__score = score
+
+                def print_score(self):
+                    print('%s: %s' % (self.__name, self.__score))
+        外部需要访问，给Student类增加get_name和get_score这样的方法
+            class Student(object):
+                ...
+
+                def get_name(self):
+                    return self.__name
+
+                def get_score(self):
+                    return self.__score
+        外部需要修改score
+            class Student(object):
+                ...
+
+                def set_score(self, score):
+                    self.__score = score
+        好处，可以对参数进行检查，防止无效参数
+            class Student(object):
+                ...
+
+                def set_score(self, score):
+                    if 0 <= score <= 100:
+                        self.__score = score
+                    else:
+                        raise ValueError('bad score')
+        __xxx__特殊变量，可以访问
+        _name，虽然可以访问，但不要随意访问
+        __name==_Student__name，可以通过_Student__name访问
+        错误示例：bart.__name = 'New Name'，给bart新增__name变量
